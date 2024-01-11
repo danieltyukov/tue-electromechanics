@@ -16,7 +16,7 @@ clc;
 %% Import data from LabVIEW
 % Datafile should be in same folder as this script.
 
-load('Measurement_2023_12_6_17_24.mat');
+load('Measurement_Data/Measurement_2023_12_6_17_24.mat');
 
 % TODO: add constants from previous sections
 k_phi = 0.968;
