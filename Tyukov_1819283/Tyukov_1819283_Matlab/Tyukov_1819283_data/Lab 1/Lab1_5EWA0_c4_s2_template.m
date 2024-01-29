@@ -73,8 +73,8 @@ eff = eff_motor + eff_gen;
 figure;
 plot(Ts, omega_m);
 title('Torque vs Speed');
-xlabel('Speed (rad/s)');
-ylabel('Shaft Torque (Nm)');
+xlabel('Speed [rad/s]');
+ylabel('Shaft Torque [Nm]');
 
 % TODO: plot the efficiency plots. Use only the datapoints which are
 % physically posible. If you calculate an efficiency less than 0% or
@@ -85,7 +85,7 @@ plot(Ts, eff, 'o');
 
 % plot(n_filtered, eff_gen, 'o');
 title('Efficiency vs Speed');
-xlabel('Torque (Nm)');
+xlabel('Torque [Nm]');
 ylabel('Efficiency');
 % axis([min(n_filtered) max(n_filtered) 0 1]); % Ensuring efficiency is between 0 and 1
 

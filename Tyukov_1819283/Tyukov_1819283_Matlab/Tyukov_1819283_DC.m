@@ -98,8 +98,8 @@ end
 
 legend('Meas_1', 'Meas_2', 'Meas_3', 'Model_1', 'Model_2', 'Model_3');
 title('Torque vs Speed');
-ylabel('Speed (rad/s)');
-xlabel('Shaft Torque (Nm)');
+ylabel('Speed [rad/s]');
+xlabel('Shaft Torque [Nm]');
 hold off;
 
 % Efficiency vs Speed
@@ -112,6 +112,6 @@ end
 
 legend('Meas_1', 'Meas_2', 'Meas_3', 'Model_1', 'Model_2', 'Model_3');
 title('Efficiency vs Speed');
-xlabel('Torque (Nm)');
+xlabel('Torque [Nm]');
 ylabel('Efficiency');
 hold off;
