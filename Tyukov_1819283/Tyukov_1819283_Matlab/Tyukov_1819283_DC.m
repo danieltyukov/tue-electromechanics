@@ -81,8 +81,15 @@ eff_meas = eff_meas + (Ts_meas < 0).*(Td_meas < 0).*(abs(Va_DCM_filtered.*Ia_DCM
 
 % Errors
 % Inputs should have 1 row only
-for i=1:3
-    err_shaft(i) = median_absolute_error(Ts_model, Ts_meas(i,:), omega_m_model(i,:), omega_m_meas(i,:), 0.1);
+err_shaft = zeros(size(Ts_meas, 1), 1);
+for i = 1:3
+    err_shaft(i) = median_absolute_error(omega_m_model(i,:), Ts_model, omega_m_meas(i,:), Ts_meas(i,:), 0.5);
+end
+
+% Efficiency - Shaft torque
+err_eff = zeros(size(omega_m_meas, 1), 1);
+for i = 1:3
+    err_eff(i) = median_absolute_error(Ts_model, eff_model(i,:), Ts_meas(i,:), eff_meas(i,:), 0.1);
 end
 
 
