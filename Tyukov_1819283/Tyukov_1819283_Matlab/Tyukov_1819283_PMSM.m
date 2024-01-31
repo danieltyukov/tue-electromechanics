@@ -93,20 +93,32 @@ ts_meas = td_meas - tf_pmsm_meas;
 % 5
 
 PF_meas = PF_ACM_filtered;
+PF_meas(abs(PF_meas) < 0.1) = NaN;
+
 % Motor
 eff_meas = (ts_meas > 0).*(td_meas > 0).*(ts_meas.*omega_m_meas)./abs(3*va_meas.*ia_meas.*PF_meas);
 % Generator
 eff_meas = eff_meas + (ts_meas < 0).*(td_meas < 0).*abs(3*va_meas.*ia_meas.*PF_meas)./abs(ts_meas.*omega_m_meas);
 
+
+% PF - shaft torque
 error_pf = zeros(size(PF_meas, 1), 1);
 for i = 1:3
-    error_pf(i) = median_absolute_error(ts_model(i,:), PF_model(i,:), ts_meas(i,:), PF_meas(i,:), 0.01);
+    error_pf(i) = median(error_calc(ts_model(i,:), PF_model(i,:), ts_meas(i,:), PF_meas(i,:), 0.001));
 end
 
+error_pf_max = zeros(size(PF_meas, 1), 1);
+for i = 1:3
+    error_pf_max(i) = max(error_calc(ts_model(i,:), PF_model(i,:), ts_meas(i,:), PF_meas(i,:), 0.001));
+end
 % Efficiency - Shaft torque
 error_eff = zeros(size(eff_meas, 1), 1);
 for i = 1:3
-    error_eff(i) = median_absolute_error(ts_model(i,:), eff_model(i,:), ts_meas(i,:), eff_meas(i,:), 0.01);
+    error_eff(i) = median(error_calc(ts_model(i,:), eff_model(i,:), ts_meas(i,:), eff_meas(i,:), 0.01));
+end
+error_eff_max = zeros(size(eff_meas, 1), 1);
+for i = 1:3
+    error_eff_max(i) = max(error_calc(ts_model(i,:), eff_model(i,:), ts_meas(i,:), eff_meas(i,:), 0.01));
 end
 %%
 figure;

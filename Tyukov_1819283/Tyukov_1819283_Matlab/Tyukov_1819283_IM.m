@@ -107,46 +107,72 @@ eff_model = eff_model + (ts_IM_model < 0).*(td_IM_model < 0).*(PF_model < 0).*(3
 % Shaft torque - Speed
 error_ts = zeros(size(ts_IM_meas, 1), 1);
 for i = 1:3
-    error_ts(i) = median(error_calc(omega_m_model(i,:), ts_IM_model(i,:), omega_m_meas(i,:), ts_IM_meas(i,:), 0.2));
+    error_ts(i) = median(error_calc(omega_m_model(i,:), ts_IM_model(i,:), omega_m_meas(i,:), ts_IM_meas(i,:), 0.1));
 end
-% PF - Shaft torque
+error_ts_max = zeros(size(ts_IM_meas, 1), 1);
+for i = 1:3
+    error_ts_max(i) = max(error_calc(omega_m_model(i,:), ts_IM_model(i,:), omega_m_meas(i,:), ts_IM_meas(i,:), 0.0005));
+end
+% PF - Speed
 error_pf = zeros(size(PF_meas, 1), 1);
 for i = 1:3
-    error_pf(i) = median(error_calc(ts_IM_model(i,:), PF_model(i,:), ts_IM_meas(i,:), PF_meas(i,:), 0.2));
+    error_pf(i) = median(error_calc(omega_m_model(i,:), PF_model(i,:), omega_m_meas(i,:), PF_meas(i,:), 0.001));
+end
+error_pf_max = zeros(size(PF_meas, 1), 1);
+for i = 1:3
+    error_pf_max(i) = max(error_calc(omega_m_model(i,:), PF_model(i,:), omega_m_meas(i,:), PF_meas(i,:), 0.001));
 end
 
-% Efficiency - Shaft torque
+% Efficiency - Speed
 error_eff = zeros(size(eff_meas, 1), 1);
 for i = 1:3
-    error_eff(i) = median(error_calc(ts_IM_model(i,:), eff_model(i,:), ts_IM_meas(i,:), eff_meas(i,:), 0.2));
+    error_eff(i) = median(error_calc(omega_m_model(i,:), eff_model(i,:), omega_m_meas(i,:), eff_meas(i,:), 0.001));
+end
+error_eff_max = zeros(size(eff_meas, 1), 1);
+for i = 1:3
+    error_eff_max(i) = max(error_calc(omega_m_model(i,:), eff_model(i,:), omega_m_meas(i,:), eff_meas(i,:), 0.001));
 end
 %%
 %%plots
-figure;
-hold on;
 col = ['r', 'g', 'b'];
+figure;
+hold on;
 for k=1:3
-    meas(k) = plot(omega_m_meas(k,:), ts_IM_meas(k,:), 'o', Color=col(k));
-    model(k) = plot(omega_m_model(k,:), ts_IM_model(k,:), Color=col(k));
+    plot(omega_m_meas(k,:), ts_IM_meas(k,:), 'o', Color=col(k));
 end
-yline(0);
-title('Ts to omega');
+
+for k=1:3
+    plot(omega_m_model(k,:), ts_IM_model(k,:), Color=col(k));
+end
+legend('$f = 40$ [Hz]', '$f = 25$ [Hz]', '$f = 10$ [Hz]', 'interpreter', 'latex');
+xlabel('Shaft speed $\omega_m$ [rad/s]', 'interpreter', 'latex');
+ylabel('Shaft torque $T_s$ [Nm]', 'interpreter', 'latex');
 hold off;
 
 figure;
 hold on;
 for k=1:3
-    meas(k) = plot(omega_m_meas(k,:), PF_meas(k,:), 'o', Color=col(k));
-    model(k) = plot(omega_m_model(k,:), PF_model(k,:), Color=col(k));
+    plot(omega_m_meas(k,:), PF_meas(k,:), 'o', Color=col(k));
 end
-title('Power factor');
+
+for k=1:3
+    plot(omega_m_model(k,:), PF_model(k,:), Color=col(k));
+end
+legend('$f = 40$ [Hz]', '$f = 25$ [Hz]', '$f = 10$ [Hz]', 'interpreter', 'latex');
+xlabel('Shaft torque $T_s$ [Nm]', 'Interpreter', 'latex');
+ylabel('$\eta$', 'Interpreter', 'latex');
 hold off;
 
 figure;
 hold on;
 for k=1:3
-    meas(k) = plot(omega_m_meas(k,:), eff_meas(k,:), 'o', Color=col(k));
-    model(k) = plot(omega_m_model(k,:), eff_model(k,:), Color=col(k));
+    plot(omega_m_meas(k,:), eff_meas(k,:), 'o', Color=col(k));
 end
-title('Efficiency');
+
+for k=1:3
+    plot(omega_m_model(k,:), eff_model(k,:), Color=col(k));
+end
+legend('$f = 40$ [Hz]', '$f = 25$ [Hz]', '$f = 10$ [Hz]', 'interpreter', 'latex');
+xlabel('Shaft torque $T_s$ [Nm]', 'Interpreter', 'latex');
+ylabel('$\eta$', 'Interpreter', 'latex');
 hold off;

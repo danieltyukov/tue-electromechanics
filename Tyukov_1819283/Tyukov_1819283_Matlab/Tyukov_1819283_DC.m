@@ -11,7 +11,7 @@ Rf = 658;
 %%
 % Calculate - Model
 Tf_model = [0.58; 0.45; 0.7];
-Ts_model = -7:0.01:7;
+Ts_model = -7:0.001:7;
 
 Va_model = [150; 50; 250];
 
@@ -77,17 +77,27 @@ eff_meas = eff_meas + (Ts_meas < 0).*(Td_meas < 0).*(abs(Va_DCM_filtered.*Ia_DCM
 
 % Errors
 % Inputs should have 1 row only
-err_shaft = zeros(size(Ts_meas, 1), 1);
+% Shaft torque - Speed
+error_shaft = zeros(size(Ts_meas, 1), 1);
 for i = 1:3
-    err_shaft(i) = median_absolute_error(omega_m_model(i,:), Ts_model, omega_m_meas(i,:), Ts_meas(i,:), 0.5);
+    error_shaft(i) = median(error_calc(omega_m_model(i,:), Ts_model, omega_m_meas(i,:), Ts_meas(i,:), 0.05));
+end
+
+error_shaft_max = zeros(size(Ts_meas, 1), 1);
+for i = 1:3
+    error_shaft_max(i) = max(error_calc(omega_m_model(i,:), Ts_model, omega_m_meas(i,:), Ts_meas(i,:), 0.005));
 end
 
 % Efficiency - Shaft torque
-err_eff = zeros(size(omega_m_meas, 1), 1);
+error_eff = zeros(size(eff_meas, 1), 1);
 for i = 1:3
-    err_eff(i) = median_absolute_error(Ts_model, eff_model(i,:), Ts_meas(i,:), eff_meas(i,:), 0.1);
+    error_eff(i) = median(error_calc(Ts_model, eff_model(i,:), Ts_meas(i,:), eff_meas(i,:), 0.05));
 end
 
+error_eff_max = zeros(size(eff_meas, 1), 1);
+for i = 1:3
+    error_eff_max(i) = max(error_calc(Ts_model, eff_model(i,:), Ts_meas(i,:), eff_meas(i,:), 0.05));
+end
 
 %%
 figure;
