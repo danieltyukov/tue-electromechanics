@@ -15,19 +15,15 @@ Ts_model = -7:0.01:7;
 
 Va_model = [150; 50; 250];
 
-% TODO: insert equations to calculate powers and efficiency
 Td_model = Ts_model+Tf_model;
 Ia_model = Td_model / k_phi;
 E_model = Va_model - Ia_model*Ra;
 omega_m_model = E_model/k_phi;
 Ps_model = Ts_model .* omega_m_model;
 n_model = omega_m_model/(2 * pi);
-eff_motor_model = (Ts_model > 0).*(Td_model > 0).*Ps_model./((Va_model.*Ia_model)+(If*Vf));
-% eff_motor(eff_motor == 0) = NaN;
 
-eff_gen_model = (Ts_model < 0).*(Td_model < 0).*(abs(Va_model.*Ia_model))./(abs(Ps_model)+(If*Vf));
-% eff_gen(eff_gen == 0) = NaN;
-eff_model = eff_motor_model + eff_gen_model;
+eff_model = (Ts_model > 0).*(Td_model > 0).*Ps_model./((Va_model.*Ia_model)+(If*Vf));
+eff_model = eff_model + (Ts_model < 0).*(Td_model < 0).*(abs(Va_model.*Ia_model))./(abs(Ps_model)+(If*Vf));
 
 %%
 % Calculate - Actual
@@ -99,26 +95,29 @@ hold on;
 % Speed vs Shaft torque
 col = ['r', 'g', 'b'];
 for k=1:3
-    meas(k) = plot(Ts_meas(k,:), omega_m_meas(k,:), 'o', Color=col(k));
-    model(k) = plot(Ts_model, omega_m_model(k,:), Color=col(k));
+    plot(Ts_model, omega_m_model(k,:), Color=col(k));
 end
 
-legend('Meas_1', 'Meas_2', 'Meas_3', 'Model_1', 'Model_2', 'Model_3');
-title('Torque vs Speed');
-ylabel('Speed [rad/s]');
-xlabel('Shaft Torque [Nm]');
+for k=1:3
+    plot(Ts_meas(k,:), omega_m_meas(k,:), 'o', Color=col(k));
+end
+
+legend('$V_a = 50 [V]$ ', '$V_a = 150 [V]$', '$V_a = 250 [V]$', 'interpreter', 'latex');
+xlabel('Shaft speed $\omega_m$ [rad/s]', 'interpreter', 'latex');
+ylabel('Shaft torque $T_s$ [Nm]', 'interpreter', 'latex');
 hold off;
 
 % Efficiency vs Speed
 figure;
 hold on;
 for k=1:3
-    plot(Ts_meas(k,:), eff_meas(k,:), 'o');
     plot(Ts_model, eff_model(k,:));
 end
+for k=1:3
+    plot(Ts_meas(k,:), eff_meas(k,:), 'o');
+end
 
-legend('Meas_1', 'Meas_2', 'Meas_3', 'Model_1', 'Model_2', 'Model_3');
-title('Efficiency vs Speed');
-xlabel('Torque [Nm]');
-ylabel('Efficiency');
+legend('$V_a = 50 [V]$ ', '$V_a = 150 [V]$', '$V_a = 250 [V]$', 'interpreter', 'latex');
+xlabel('Shaft speed $\omega_m$ [rad/s]', 'interpreter', 'latex');
+ylabel('Shaft torque $T_s$ [Nm]', 'interpreter', 'latex');
 hold off;

@@ -1,3 +1,7 @@
+clear all;
+close all;
+clc;
+
 % Parameters
 % 3.0 kW Siemens 1AV3104A
 Lm = 0.3112 % Magnetizing inductance
@@ -8,40 +12,6 @@ R2 = 0.963 % Rotor resistance
 Iph = 5.6 % max current
 Vph = 230 % max voltage
 
-
-f_model = [40; 25; 10];
-% b = 10, Van = 230 @f=50
-b = 10;
-a = (230-b)/50;
-Van_model = a.*f_model + b;
-s = linspace(-1, 1, 1e4);
-s(s==0) = NaN;
-
-omega_e_model = 2*pi.*f_model;
-omega_m_model = omega_e_model.*(1-s);
-R_2 = R2./s;
-% electrical
-
-Z1 = 1i.*omega_e_model*L1+R1;
-Z2m = ((i.*omega_e_model*L2+R_2).*(i.*omega_e_model*Lm))./(i.*omega_e_model*L2+R_2+i.*omega_e_model*Lm);
-Ztot = Z1+Z2m;
-I2 = Van_model./Ztot.*(i.*omega_e_model*Lm)./(i.*omega_e_model*Lm + R_2 + i.*omega_e_model*L2);
-Ia_model = Van_model./Ztot;
-
-PF_model = cos(angle(Ia_model));
-
-% mechanical
-
-tf_tot_model = 0.002401 * omega_m_model + 0.5246;
-tf_IM_model = 0.2*tf_tot_model;
-td_IM_model = 3*abs(I2).^2.*R_2./(omega_e_model);
-ts_IM_model = td_IM_model - tf_IM_model;
-
-
-% Motor
-eff_model = (ts_IM_model > 0).*(td_IM_model > 0).*(ts_IM_model.*omega_m_model)./(3.*Van_model.*abs(Ia_model).*PF_model);
-% Generator
-eff_model = eff_model + (ts_IM_model < 0).*(td_IM_model < 0).*(PF_model < 0).*(3.*Van_model.*abs(Ia_model).*abs(PF_model))./(abs(ts_IM_model).*abs(omega_m_model));
 %%
 % Calculate - Actual
 
@@ -85,15 +55,71 @@ n_filtered(n_filtered < -30) = NaN;
 omega_m_meas = n_filtered * 2*pi;
 td_DCM_meas = k_phi*Ia_DCM_filtered;
 tf_tot_meas = 0.002401 * omega_m_meas + 0.5246;
-td_IM_meas = 0.8*tf_tot_meas - td_DCM_meas;
-ts_IM_meas = tf_tot_meas - td_DCM_meas;
+td_IM_meas = tf_tot_meas - td_DCM_meas;
+ts_IM_meas = 0.8*tf_tot_meas - td_DCM_meas;
 
 Van_meas = Van_ACM_filtered;
 Ia_meas = Ia_ACM_filtered;
 PF_meas = PF_ACM_filtered;
+
 eff_meas = (ts_IM_meas > 0).*(td_IM_meas > 0).*(ts_IM_meas.*omega_m_meas)./(3.*Van_meas.*abs(Ia_meas).*PF_meas);
-% Generator
 eff_meas = eff_meas + (ts_IM_meas < 0).*(td_IM_meas < 0).*(PF_meas < 0).*(3.*Van_meas.*abs(Ia_meas).*abs(PF_meas))./(abs(ts_IM_meas).*omega_m_meas);
+
+%%
+f_model = [40; 25; 10];
+coeff = polyfit(f_model, mean(Van_ACM_filtered(:,20:end), 2), 1)
+b = coeff(2);
+a = coeff(1);
+Van_model = a.*f_model + b;
+s = linspace(-1, 1, 1e4);
+s(s==0) = NaN;
+
+omega_e_model = 2*pi.*f_model;
+omega_m_model = omega_e_model.*(1-s);
+R_2 = R2./s;
+% electrical
+
+Z1 = 1i.*omega_e_model*L1+R1;
+Z2m = ((i.*omega_e_model*L2+R_2).*(i.*omega_e_model*Lm))./(i.*omega_e_model*L2+R_2+i.*omega_e_model*Lm);
+Ztot = Z1+Z2m;
+I2 = Van_model./Ztot.*(i.*omega_e_model*Lm)./(i.*omega_e_model*Lm + R_2 + i.*omega_e_model*L2);
+Ia_model = Van_model./Ztot;
+
+PF_model = cos(angle(Ia_model));
+
+% mechanical
+
+tf_tot_model = 0.002401 * omega_m_model + 0.5246;
+tf_IM_model = 0.2*tf_tot_model;
+td_IM_model = 3*abs(I2).^2.*R_2./(omega_e_model);
+ts_IM_model = td_IM_model - tf_IM_model;
+
+ts_IM_model((ts_IM_model < -7) | (ts_IM_model > 7)) = NaN;
+ts_IM_meas((ts_IM_meas < -7) | (ts_IM_meas > 7)) = NaN;
+omega_m_model(isnan(ts_IM_model)) = NaN;
+omega_m_meas(isnan(ts_IM_meas)) = NaN;
+
+% Motor
+eff_model = (ts_IM_model > 0).*(td_IM_model > 0).*(ts_IM_model.*omega_m_model)./(3.*Van_model.*abs(Ia_model).*PF_model);
+% Generator
+eff_model = eff_model + (ts_IM_model < 0).*(td_IM_model < 0).*(PF_model < 0).*(3.*Van_model.*abs(Ia_model).*abs(PF_model))./(abs(ts_IM_model).*abs(omega_m_model));
+
+% Shaft torque - Speed
+error_ts = zeros(size(ts_IM_meas, 1), 1);
+for i = 1:3
+    error_ts(i) = median(error_calc(omega_m_model(i,:), ts_IM_model(i,:), omega_m_meas(i,:), ts_IM_meas(i,:), 0.2));
+end
+% PF - Shaft torque
+error_pf = zeros(size(PF_meas, 1), 1);
+for i = 1:3
+    error_pf(i) = median(error_calc(ts_IM_model(i,:), PF_model(i,:), ts_IM_meas(i,:), PF_meas(i,:), 0.2));
+end
+
+% Efficiency - Shaft torque
+error_eff = zeros(size(eff_meas, 1), 1);
+for i = 1:3
+    error_eff(i) = median(error_calc(ts_IM_model(i,:), eff_model(i,:), ts_IM_meas(i,:), eff_meas(i,:), 0.2));
+end
 %%
 %%plots
 figure;

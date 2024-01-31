@@ -10,7 +10,8 @@ p = 8;
 % Calculate model
 % 4.4
 beta_model = 0;
-ia_model = -5:0.001:5; % armature current
+ia_model = -5:0.005:5; % armature current
+ia_model = ia_model(ia_model ~= 0);
 
 n_model = [15; 25; 35];
 omega_m_model = 2*pi*n_model;
@@ -30,7 +31,7 @@ td_model = 3*ef_model*ia_model*cos(beta_model)./omega_m_model;
 ts_model = td_model - tf_pmsm_model;
 
 % 5
-PF_model = cos(angle(va_model));
+PF_model = cos(angle(va_model) - angle(ia_model));
 % Motor
 eff_model = (ts_model > 0).*(td_model > 0).*(ts_model.*omega_m_model)./abs(3*va_model.*ia_model.*PF_model);
 % Generator
@@ -97,39 +98,42 @@ eff_meas = (ts_meas > 0).*(td_meas > 0).*(ts_meas.*omega_m_meas)./abs(3*va_meas.
 % Generator
 eff_meas = eff_meas + (ts_meas < 0).*(td_meas < 0).*abs(3*va_meas.*ia_meas.*PF_meas)./abs(ts_meas.*omega_m_meas);
 
+error_pf = zeros(size(PF_meas, 1), 1);
+for i = 1:3
+    error_pf(i) = median_absolute_error(ts_model(i,:), PF_model(i,:), ts_meas(i,:), PF_meas(i,:), 0.01);
+end
+
+% Efficiency - Shaft torque
+error_eff = zeros(size(eff_meas, 1), 1);
+for i = 1:3
+    error_eff(i) = median_absolute_error(ts_model(i,:), eff_model(i,:), ts_meas(i,:), eff_meas(i,:), 0.01);
+end
+%%
 figure;
 hold on;
 col = ['r', 'g', 'b'];
-% for k=1:3
-%     meas(k) = plot(ts_meas(k,:), abs(va_meas(k,:)), 'o', Color=col(k));
-%     model(k) = plot(ts_model(k,:), abs(va_model(k,:)), Color=col(k));
-% end
-% title('Voltage wrt shaft torque');
-% xlabel('Shaft torque (Motor)');
-% ylabel('Va');
-% legend('Va (V)');
-% hold off;
-% 
-% figure;
-% hold on;
-% for k=1:3
-%     meas(k) = plot(ts_meas(k,:), ia_meas(k,:), 'o', Color=col(k));
-%     model(k) = plot(ts_model(k,:), ia_model, Color=col(k));
-% end
-% title('Current wrt shaft torque');
-% xlabel('Shaft torque (Motor)');
-% ylabel('Va');
-% legend('Va (V)');
-% hold off;
+for k=1:3
+    plot(ts_meas(k,:), PF_meas(k,:), 'o', Color=col(k));
+end
+
+for k=1:3
+    plot(ts_model(k,:), PF_model(k,:), Color=col(k));
+end
+legend('$n_m = 15$ [rev/s]', '$n_m = 25$ [rev/s]', '$n_m = 35$ [rev/s]', 'interpreter', 'latex');
+xlabel('Shaft speed $\omega_m$ [rad/s]', 'interpreter', 'latex');
+ylabel('Shaft torque $T_s$ [Nm]', 'interpreter', 'latex');
+hold off;
 
 figure;
 hold on;
 for k=1:3
-    plot(ts_meas(k,:), PF_meas(k,:), ts_meas(k,:), eff_meas(k,:), 'o', Color=col(k));
-    plot(ts_model(k,:), PF_model(k,:), ts_model(k,:), eff_model(k,:), Color=col(k));
+    plot(ts_meas(k,:), eff_meas(k,:), 'o', Color=col(k));
 end
-title('Power factor and efficiency wrt shaft torque (Motor mode)');
-xlabel('Shaft torque (Motor)');
-ylabel('PF, $\eta$', 'Interpreter', 'latex');
-legend('PF', '$\eta$', 'Interpreter', 'latex');
+
+for k=1:3
+    plot(ts_model(k,:), eff_model(k,:), Color=col(k));
+end
+legend('$n_m = 15$ [rev/s]', '$n_m = 25$ [rev/s]', '$n_m = 35$ [rev/s]', 'interpreter', 'latex');
+xlabel('Shaft torque $T_s$ [Nm]', 'Interpreter', 'latex');
+ylabel('$\eta$', 'Interpreter', 'latex');
 hold off;
