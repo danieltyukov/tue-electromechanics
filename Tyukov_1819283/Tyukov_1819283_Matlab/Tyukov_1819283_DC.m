@@ -106,11 +106,11 @@ hold on;
 % Speed vs Shaft torque
 col = ['r', 'g', 'b'];
 for k=1:3
-    plot(Ts_model, omega_m_model(k,:), Color=col(k));
+    plot(omega_m_model(k,:), Ts_model, Color=col(k));
 end
 
 for k=1:3
-    plot(Ts_meas(k,:), omega_m_meas(k,:), 'o', Color=col(k));
+    plot(omega_m_meas(k,:), Ts_meas(k,:), 'o', Color=col(k));
 end
 
 legend('$V_a = 50 [V]$ ', '$V_a = 150 [V]$', '$V_a = 250 [V]$', 'interpreter', 'latex');
