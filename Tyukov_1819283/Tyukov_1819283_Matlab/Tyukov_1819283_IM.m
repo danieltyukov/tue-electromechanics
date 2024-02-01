@@ -111,26 +111,26 @@ for i = 1:3
 end
 error_ts_max = zeros(size(ts_IM_meas, 1), 1);
 for i = 1:3
-    error_ts_max(i) = max(error_calc(omega_m_model(i,:), ts_IM_model(i,:), omega_m_meas(i,:), ts_IM_meas(i,:), 0.0005));
+    error_ts_max(i) = max(error_calc(omega_m_model(i,:), ts_IM_model(i,:), omega_m_meas(i,:), ts_IM_meas(i,:), 0.06));
 end
 % PF - Speed
 error_pf = zeros(size(PF_meas, 1), 1);
 for i = 1:3
-    error_pf(i) = median(error_calc(omega_m_model(i,:), PF_model(i,:), omega_m_meas(i,:), PF_meas(i,:), 0.001));
+    error_pf(i) = median(error_calc(omega_m_model(i,:), PF_model(i,:), omega_m_meas(i,:), PF_meas(i,:), 0.04));
 end
 error_pf_max = zeros(size(PF_meas, 1), 1);
 for i = 1:3
-    error_pf_max(i) = max(error_calc(omega_m_model(i,:), PF_model(i,:), omega_m_meas(i,:), PF_meas(i,:), 0.001));
+    error_pf_max(i) = max(error_calc(omega_m_model(i,:), PF_model(i,:), omega_m_meas(i,:), PF_meas(i,:), 0.01));
 end
 
 % Efficiency - Speed
 error_eff = zeros(size(eff_meas, 1), 1);
 for i = 1:3
-    error_eff(i) = median(error_calc(omega_m_model(i,:), eff_model(i,:), omega_m_meas(i,:), eff_meas(i,:), 0.001));
+    error_eff(i) = median(error_calc(omega_m_model(i,:), eff_model(i,:), omega_m_meas(i,:), eff_meas(i,:), 0.005));
 end
 error_eff_max = zeros(size(eff_meas, 1), 1);
 for i = 1:3
-    error_eff_max(i) = max(error_calc(omega_m_model(i,:), eff_model(i,:), omega_m_meas(i,:), eff_meas(i,:), 0.001));
+    error_eff_max(i) = max(error_calc(omega_m_model(i,:), eff_model(i,:), omega_m_meas(i,:), eff_meas(i,:), 0.002));
 end
 %%
 %%plots
