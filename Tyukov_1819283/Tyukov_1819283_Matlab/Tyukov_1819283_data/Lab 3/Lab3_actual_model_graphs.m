@@ -100,7 +100,8 @@ eff_model = (ts_IM_model > 0).*(td_IM_model > 0).*(ts_IM_model.*omega_m_model)./
 eff_model = eff_model + (ts_IM_model < 0).*(td_IM_model < 0).*(PF_model < 0).*(3.*Van_model.*abs(Ia_model).*abs(PF_model))./(abs(ts_IM_model).*abs(omega_m_model));
 %%
 %%plots
-figure;
+fig = figure(Units="inches");
+fig.Position(3) = 3.5;
 hold on;
 col = ['r', 'g', 'b'];
 for k=1:3
@@ -111,7 +112,8 @@ yline(0);
 title('Ts to omega');
 hold off;
 
-figure;
+fig = figure(Units="inches");
+fig.Position(3) = 3.5;
 hold on;
 for k=1:3
     meas(k) = plot(omega_m_meas(k,:), PF_meas(k,:), 'o', Color=col(k));
@@ -120,7 +122,8 @@ end
 title('Power factor');
 hold off;
 
-figure;
+fig = figure(Units="inches");
+fig.Position(3) = 3.5;
 hold on;
 for k=1:3
     meas(k) = plot(omega_m_meas(k,:), eff_meas(k,:), 'o', Color=col(k));

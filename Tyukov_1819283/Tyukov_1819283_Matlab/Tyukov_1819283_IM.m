@@ -135,7 +135,8 @@ end
 %%
 %%plots
 col = ['r', 'g', 'b'];
-figure;
+fig = figure(Units="inches");
+fig.Position(3) = 3.5;
 hold on;
 for k=1:3
     plot(omega_m_meas(k,:), ts_IM_meas(k,:), 'o', Color=col(k));
@@ -149,7 +150,8 @@ xlabel('Shaft speed $\omega_m$ [rad/s]', 'interpreter', 'latex');
 ylabel('Shaft torque $T_s$ [Nm]', 'interpreter', 'latex');
 hold off;
 
-figure;
+fig = figure(Units="inches");
+fig.Position(3) = 3.5;
 hold on;
 for k=1:3
     plot(omega_m_meas(k,:), PF_meas(k,:), 'o', Color=col(k));
@@ -160,10 +162,14 @@ for k=1:3
 end
 legend('$f = 40$ [Hz]', '$f = 25$ [Hz]', '$f = 10$ [Hz]', 'interpreter', 'latex');
 xlabel('Shaft torque $T_s$ [Nm]', 'Interpreter', 'latex');
-ylabel('$\eta$', 'Interpreter', 'latex');
+ylabel('Power factor $\cos \beta$ [\%]', 'interpreter', 'latex');
 hold off;
 
-figure;
+eff_meas = 100*eff_meas;
+eff_model = 100*eff_model;
+
+fig = figure(Units="inches");
+fig.Position(3) = 3.5;
 hold on;
 for k=1:3
     plot(omega_m_meas(k,:), eff_meas(k,:), 'o', Color=col(k));
@@ -174,5 +180,5 @@ for k=1:3
 end
 legend('$f = 40$ [Hz]', '$f = 25$ [Hz]', '$f = 10$ [Hz]', 'interpreter', 'latex');
 xlabel('Shaft torque $T_s$ [Nm]', 'Interpreter', 'latex');
-ylabel('$\eta$', 'Interpreter', 'latex');
+ylabel('Efficiency $\eta$ [\%]', 'interpreter', 'latex');
 hold off;

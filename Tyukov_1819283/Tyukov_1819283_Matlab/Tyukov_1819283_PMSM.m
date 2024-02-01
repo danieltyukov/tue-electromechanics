@@ -121,7 +121,8 @@ for i = 1:3
     error_eff_max(i) = max(error_calc(ts_model(i,:), eff_model(i,:), ts_meas(i,:), eff_meas(i,:), 0.01));
 end
 %%
-figure;
+fig = figure(Units="inches");
+fig.Position(3) = 3.5;
 hold on;
 col = ['r', 'g', 'b'];
 for k=1:3
@@ -136,7 +137,11 @@ xlabel('Shaft speed $\omega_m$ [rad/s]', 'interpreter', 'latex');
 ylabel('Shaft torque $T_s$ [Nm]', 'interpreter', 'latex');
 hold off;
 
-figure;
+eff_meas = 100*eff_meas;
+eff_model = 100*eff_model;
+
+fig = figure(Units="inches");
+fig.Position(3) = 3.5;
 hold on;
 for k=1:3
     plot(ts_meas(k,:), eff_meas(k,:), 'o', Color=col(k));
@@ -147,5 +152,5 @@ for k=1:3
 end
 legend('$n_m = 15$ [rev/s]', '$n_m = 25$ [rev/s]', '$n_m = 35$ [rev/s]', 'interpreter', 'latex');
 xlabel('Shaft torque $T_s$ [Nm]', 'Interpreter', 'latex');
-ylabel('$\eta$', 'Interpreter', 'latex');
+ylabel('Efficiency $\eta$ [\%]', 'interpreter', 'latex');
 hold off;

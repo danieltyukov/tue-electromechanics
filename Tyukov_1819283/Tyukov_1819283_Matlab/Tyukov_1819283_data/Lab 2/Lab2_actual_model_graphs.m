@@ -97,7 +97,8 @@ eff_meas = (ts_meas > 0).*(td_meas > 0).*(ts_meas.*omega_m_meas)./abs(3*va_meas.
 % Generator
 eff_meas = eff_meas + (ts_meas < 0).*(td_meas < 0).*abs(3*va_meas.*ia_meas.*PF_meas)./abs(ts_meas.*omega_m_meas);
 
-figure;
+fig = figure(Units="inches");
+fig.Position(3) = 3.5;
 hold on;
 col = ['r', 'g', 'b'];
 for k=1:3
@@ -110,7 +111,8 @@ ylabel('Va');
 legend('Va (V)');
 hold off;
 
-figure;
+fig = figure(Units="inches");
+fig.Position(3) = 3.5;
 hold on;
 for k=1:3
     meas(k) = plot(ts_meas(k,:), ia_meas(k,:), 'o', Color=col(k));
@@ -122,7 +124,8 @@ ylabel('Va');
 legend('Va (V)');
 hold off;
 
-figure;
+fig = figure(Units="inches");
+fig.Position(3) = 3.5;
 hold on;
 for k=1:3
     plot(ts_meas(k,:), PF_meas(k,:), ts_meas(k,:), eff_meas(k,:), 'o', Color=col(k));

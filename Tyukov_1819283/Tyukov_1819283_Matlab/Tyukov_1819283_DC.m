@@ -100,7 +100,8 @@ for i = 1:3
 end
 
 %%
-figure;
+fig = figure(Units="inches");
+fig.Position(3) = 3.5;
 hold on;
 % Speed vs Shaft torque
 col = ['r', 'g', 'b'];
@@ -118,8 +119,12 @@ ylabel('Shaft torque $T_s$ [Nm]', 'interpreter', 'latex');
 hold off;
 
 % Efficiency vs Speed
-figure;
+fig = figure(Units="inches");
+fig.Position(3) = 3.5;
 hold on;
+
+eff_meas = 100*eff_meas;
+eff_model = 100*eff_model;
 for k=1:3
     plot(Ts_model, eff_model(k,:));
 end
@@ -129,5 +134,5 @@ end
 
 legend('$V_a = 50 [V]$ ', '$V_a = 150 [V]$', '$V_a = 250 [V]$', 'interpreter', 'latex');
 xlabel('Shaft speed $\omega_m$ [rad/s]', 'interpreter', 'latex');
-ylabel('Shaft torque $T_s$ [Nm]', 'interpreter', 'latex');
+ylabel('Efficiency $\eta$ [\%]', 'interpreter', 'latex');
 hold off;

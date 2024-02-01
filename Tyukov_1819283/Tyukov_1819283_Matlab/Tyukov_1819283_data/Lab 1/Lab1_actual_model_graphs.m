@@ -78,7 +78,8 @@ Ps_meas = Ts_meas .* omega_m_meas;
 eff_meas = (Ts_meas > 0).*(Td_meas > 0).*Ps_meas./((Va_DCM_filtered.*Ia_DCM_filtered)+(If.*Vf));
 eff_meas = eff_meas + (Ts_meas < 0).*(Td_meas < 0).*(abs(Va_DCM_filtered.*Ia_DCM_filtered))./(abs(Ps_meas)+(If.*Vf));
 %%
-figure;
+fig = figure(Units="inches");
+fig.Position(3) = 3.5;
 hold on;
 % Speed vs Shaft torque
 col = ['r', 'g', 'b'];
@@ -95,7 +96,8 @@ xlabel('Shaft Torque [Nm]');
 hold off;
 
 % Efficiency vs Speed
-figure;
+fig = figure(Units="inches");
+fig.Position(3) = 3.5;
 hold on;
 for k=1:3
     plot(Ts_meas(k,:), eff_meas(k,:), 'o');

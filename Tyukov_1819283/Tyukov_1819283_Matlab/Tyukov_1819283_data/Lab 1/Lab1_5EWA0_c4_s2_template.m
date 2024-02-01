@@ -70,7 +70,8 @@ eff = eff_motor + eff_gen;
 %% Plot data
 
 % TODO: plot the torque vs speed. Think about the axis.
-figure;
+fig = figure(Units="inches");
+fig.Position(3) = 3.5;
 plot(Ts, omega_m);
 title('Torque vs Speed');
 xlabel('Speed [rad/s]');
@@ -79,7 +80,8 @@ ylabel('Shaft Torque [Nm]');
 % TODO: plot the efficiency plots. Use only the datapoints which are
 % physically posible. If you calculate an efficiency less than 0% or
 % larger than 100% something is wrong.
-figure;
+fig = figure(Units="inches");
+fig.Position(3) = 3.5;
 hold on;
 plot(Ts, eff, 'o');
 
