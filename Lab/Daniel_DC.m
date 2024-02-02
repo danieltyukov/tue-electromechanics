@@ -103,7 +103,6 @@ lgd = legend({'$V_a = 50\,V$', '$V_a = 50\,V$', ...
 lgd.ItemTokenSize(1) = 8;
 xlabel('Shaft speed $\omega_m$ [rad/s]', 'Interpreter', 'latex');
 ylabel('Shaft torque $T_s$ [Nm]', 'Interpreter', 'latex');
-title('Shaft Speed vs Shaft Torque', 'Interpreter', 'latex');
 grid on;
 box on;
 hold off;
@@ -120,13 +119,14 @@ for k = 1:3
     scatter(torque_simulation_meas(k,:), efficiency_meas(k,:), 20, model_colors(k,:), 'filled', 'MarkerEdgeColor', 'k');
 end
 
-legend({'Model $V_a = 50\,V$', 'Measured $V_a = 50\,V$', ...
-        'Model $V_a = 150\,V$', 'Measured $V_a = 150\,V$', ...
-        'Model $V_a = 250\,V$', 'Measured $V_a = 250\,V$'}, ...
+lgd = legend({'$V_a = 50\,V$', '$V_a = 50\,V$', ...
+        '$V_a = 150\,V$', '$V_a = 150\,V$', ...
+        '$V_a = 250\,V$', '$V_a = 250\,V$'}, ...
         'Interpreter', 'latex', 'Location', 'best');
+lgd.ItemTokenSize(1) = 8;
 xlabel('Shaft torque $T_s$ [Nm]', 'Interpreter', 'latex');
 ylabel('Efficiency $\eta$ [\%]', 'Interpreter', 'latex');
-title('Efficiency vs Shaft Torque', 'Interpreter', 'latex');
+ylim([0 100]);
 grid on;
 box on;
 hold off;
