@@ -112,7 +112,7 @@ for i = 1:3
 end
 
 % plot
-fig1 = figure('Units', 'inches', 'Position', [0 0 6 4]);
+fig1 = figure('Units', 'inches', 'Position', [0 0 3.5 4]);
 hold on;
 color_palette = lines(3);
 
@@ -124,16 +124,17 @@ end
 title('Analysis of Shaft Speed and Torque', 'Interpreter', 'latex');
 xlabel('Rotational Speed $\omega_m$ [rad/s]', 'Interpreter', 'latex');
 ylabel('Torque on Shaft $T_s$ [Nm]', 'Interpreter', 'latex');
-legend({'Actual at $f = 40$ Hz', 'Predicted at $f = 40$ Hz', ...
-        'Actual at $f = 25$ Hz', 'Predicted at $f = 25$ Hz', ...
-        'Actual at $f = 10$ Hz', 'Predicted at $f = 10$ Hz'}, ...
+lgd = legend({'$f = 40$ Hz', '$f = 40$ Hz', ...
+        '$f = 25$ Hz', '$f = 25$ Hz', ...
+        '$f = 10$ Hz', '$f = 10$ Hz'}, ...
         'Interpreter', 'latex', 'Location', 'best');
+lgd.ItemTokenSize(1) = 8;
 grid on;
 box on;
 hold off;
 
 % plot pf shs
-fig2 = figure('Units', 'inches', 'Position', [0 0 6 4]);
+fig2 = figure('Units', 'inches', 'Position', [0 0 3.5 4]);
 hold on;
 
 for k = 1:3
@@ -141,13 +142,13 @@ for k = 1:3
     plot(speed_omega_m_model(k,:), pf_model(k,:), 'Color', color_palette(k,:), 'LineWidth', 1.5);
 end
 
-title('Power Factor Related to Shaft Speed', 'Interpreter', 'latex');
 xlabel('Rotational Speed $\omega_m$ [rad/s]', 'Interpreter', 'latex');
 ylabel('Power Factor', 'Interpreter', 'latex');
-legend({'Actual at $f = 40$ Hz', 'Predicted at $f = 40$ Hz', ...
-        'Actual at $f = 25$ Hz', 'Predicted at $f = 25$ Hz', ...
-        'Actual at $f = 10$ Hz', 'Predicted at $f = 10$ Hz'}, ...
+lgd = legend({'$f = 40$ Hz', '$f = 40$ Hz', ...
+        '$f = 25$ Hz', '$f = 25$ Hz', ...
+        '$f = 10$ Hz', '$f = 10$ Hz'}, ...
         'Interpreter', 'latex', 'Location', 'best');
+lgd.ItemTokenSize(1) = 8;
 grid on;
 box on;
 hold off;
@@ -155,7 +156,7 @@ hold off;
 % plot eff shs
 efficiency_meas_percent = 100 * efficiency_meas;
 efficiency_model_percent = 100 * efficiency_model;
-fig3 = figure('Units', 'inches', 'Position', [0 0 6 4]);
+fig3 = figure('Units', 'inches', 'Position', [0 0 3.5 4]);
 hold on;
 
 for k = 1:3
@@ -163,13 +164,13 @@ for k = 1:3
     plot(speed_omega_m_model(k,:), efficiency_model_percent(k,:), 'Color', color_palette(k,:), 'LineWidth', 1.5);
 end
 
-title('Efficiency in Relation to Shaft Speed', 'Interpreter', 'latex');
 xlabel('Rotational Speed $\omega_m$ [rad/s]', 'Interpreter', 'latex');
 ylabel('Efficiency $\eta$ [\%]', 'Interpreter', 'latex');
-legend({'Actual at $f = 40$ Hz', 'Predicted at $f = 40$ Hz', ...
-        'Actual at $f = 25$ Hz', 'Predicted at $f = 25$ Hz', ...
-        'Actual at $f = 10$ Hz', 'Predicted at $f = 10$ Hz'}, ...
+lgd = legend({'$f = 40$ Hz', '$f = 40$ Hz', ...
+        '$f = 25$ Hz', '$f = 25$ Hz', ...
+        '$f = 10$ Hz', '$f = 10$ Hz'}, ...
         'Interpreter', 'latex', 'Location', 'best');
+lgd.ItemTokenSize(1) = 8;
 grid on;
 box on;
 hold off;

@@ -96,7 +96,7 @@ for i = 1:3
 end
 
 % plot
-fig1 = figure(Units="inches", Position=[0 0 6 4]);
+fig1 = figure(Units="inches", Position=[0 0 3.5 4]);
 hold on;
 color_scheme = lines(3);
 
@@ -105,18 +105,18 @@ for k = 1:3
     plot(torque_ts_model(k,:), pf_model(k,:), 'Color', color_scheme(k,:), 'LineWidth', 1.5);
 end
 
-title('Comparison of Power Factor and Shaft Torque', 'Interpreter', 'latex');
 xlabel('Shaft torque $T_s$ [Nm]', 'Interpreter', 'latex');
 ylabel('Power Factor', 'Interpreter', 'latex');
-legend({'Measured at $n_m = 15$ [rev/s]', 'Model at $n_m = 15$ [rev/s]', ...
-        'Measured at $n_m = 25$ [rev/s]', 'Model at $n_m = 25$ [rev/s]', ...
-        'Measured at $n_m = 35$ [rev/s]', 'Model at $n_m = 35$ [rev/s]'}, ...
+lgd = legend({'$\omega_m = 30\pi$ [rad/s]', '$\omega_m = 30\pi$ [rad/s]', ...
+        '$\omega_m = 50\pi$ [rad/s]', '$\omega_m = 50\pi$ [rad/s]', ...
+        '$\omega_m = 70\pi$ [rad/s]', '$\omega_m = 70\pi$ [rad/s]'}, ...
         'Interpreter', 'latex', 'Location', 'best');
+lgd.ItemTokenSize(1) = 8;
 grid on;
 box on;
 hold off;
 
-fig2 = figure(Units="inches", Position=[0 0 6 4]);
+fig2 = figure(Units="inches", Position=[0 0 3.5 4]);
 hold on;
 efficiency_meas_percent = 100 * efficiency_meas;
 efficiency_model_percent = 100 * efficiency_model;
@@ -126,13 +126,13 @@ for k = 1:3
     plot(torque_ts_model(k,:), efficiency_model_percent(k,:), 'Color', color_scheme(k,:), 'LineWidth', 1.5);
 end
 
-title('Efficiency in Relation to Shaft Torque', 'Interpreter', 'latex');
 xlabel('Shaft torque $T_s$ [Nm]', 'Interpreter', 'latex');
 ylabel('Efficiency $\eta$ [\%]', 'Interpreter', 'latex');
-legend({'Measured at $n_m = 15$ [rev/s]', 'Model at $n_m = 15$ [rev/s]', ...
-        'Measured at $n_m = 25$ [rev/s]', 'Model at $n_m = 25$ [rev/s]', ...
-        'Measured at $n_m = 35$ [rev/s]', 'Model at $n_m = 35$ [rev/s]'}, ...
+lgd = legend({'$\omega_m = 30\pi$ [rad/s]', '$\omega_m = 30\pi$ [rad/s]', ...
+        '$\omega_m = 50\pi$ [rad/s]', '$\omega_m = 50\pi$ [rad/s]', ...
+        '$\omega_m = 70\pi$ [rad/s]', '$\omega_m = 70\pi$ [rad/s]'}, ...
         'Interpreter', 'latex', 'Location', 'best');
+lgd.ItemTokenSize(1) = 8;
 grid on;
 box on;
 hold off;
