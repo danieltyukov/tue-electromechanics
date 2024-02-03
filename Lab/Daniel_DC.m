@@ -27,9 +27,9 @@ pf_acm_filtered = zeros(3, num_samples);
 speed_n_filtered = zeros(3, num_samples);
 
 measurement_files = {
-    'Measurement_Data/Measurement_2023_12_14_15_44.mat',
-    'Measurement_Data/Measurement_2023_12_14_15_57.mat',
-    'Measurement_Data/Measurement_2023_12_14_16_1.mat'
+    'Measurement_2023_12_14_15_44.mat',
+    'Measurement_2023_12_14_15_57.mat',
+    'Measurement_2023_12_14_16_1.mat'
 };
 
 for file_index = 1:length(measurement_files)

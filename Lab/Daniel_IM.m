@@ -16,9 +16,9 @@ num_samples = 43;
 scaling_factor = 3;
 
 measurement_files = {
-    'Measurement_Data/Measurement_2024_1_11_15_10.mat',
-    'Measurement_Data/Measurement_2024_1_11_15_15.mat',
-    'Measurement_Data/Measurement_2024_1_11_15_19.mat'
+    'Measurement_2024_1_11_15_10.mat',
+    'Measurement_2024_1_11_15_15.mat',
+    'Measurement_2024_1_11_15_19.mat'
 };
 
 current_a_dcm_filtered = zeros(3, num_samples);
@@ -121,7 +121,6 @@ for k = 1:3
     plot(speed_omega_m_model(k,:), torque_simulation_im_model(k,:), 'Color', color_palette(k,:), 'LineWidth', 1.5);
 end
 
-title('Analysis of Shaft Speed and Torque', 'Interpreter', 'latex');
 xlabel('Rotational Speed $\omega_m$ [rad/s]', 'Interpreter', 'latex');
 ylabel('Torque on Shaft $T_s$ [Nm]', 'Interpreter', 'latex');
 lgd = legend({'$f = 40$ Hz', '$f = 40$ Hz', ...
